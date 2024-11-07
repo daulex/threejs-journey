@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import gsap from 'gsap'
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -31,23 +32,40 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height)
 
-// Clock
-const clock = new THREE.Clock()
+//animation
+let keepAnimating = true
+mesh.position.z = 20
+gsap.to(mesh.position, { duration: 1, delay: 1, x: -4, z: -1 })
+gsap.to(mesh.position, { duration: 1, delay: 2, x: 4 })
+gsap.to(mesh.position, { duration: 1, delay: 3, x: -4 })
+gsap.to(mesh.position, { duration: 1, delay: 4, x: 0.1, y: -.1 })
+gsap.to(mesh.scale, { duration: 1, delay: 4, x: 5, y: 0.8, z: 0.8 })
+gsap.to(mesh.scale, { duration: 0, delay: 5, x: 0, y: 0})
+gsap.to(mesh.scale, { duration: 0, delay: 5.1, x: 5, y: 0.8, z: 0.8 })
+gsap.to(mesh.scale, { duration: 0, delay: 5.2, x: 0, y: 0})
+gsap.to(mesh.scale, { duration: 0, delay: 5.3, x: 5, y: 0.8, z: 0.8 })
+gsap.to(mesh.scale, { duration: 1, delay: 5.4, x: 1, y: 1, z: 1 })
+gsap.to(mesh.position, { duration: .4, delay: 5.6, x: 4 })
+gsap.to(mesh.position, { duration: 1, delay: 6, x: -3, z: 20, 
+    onComplete: () => {
+        keepAnimating = false
+    }})
 
 
 // Animations
 const tick = () => {
 
-    const elapsedTime = clock.getElapsedTime()
+    // const elapsedTime = clock.getElapsedTime()
     
-    // rotate mesh a little each frame
-    mesh.rotation.y = Math.sin(elapsedTime) * 2
-    mesh.rotation.x = Math.cos(elapsedTime) * 2
-    mesh.position.y = Math.sin(elapsedTime)
-    mesh.position.x = Math.cos(elapsedTime)
+    // // rotate mesh a little each frame
+    // mesh.rotation.y = Math.sin(elapsedTime) * 2
+    // mesh.rotation.x = Math.cos(elapsedTime) * 2
+    // mesh.position.y = Math.sin(elapsedTime)
+    // mesh.position.x = Math.cos(elapsedTime)
     renderer.render(scene, camera)
-
-    window.requestAnimationFrame(tick)
+    if(keepAnimating) {
+        window.requestAnimationFrame(tick)
+    }
 }
 
 tick()
