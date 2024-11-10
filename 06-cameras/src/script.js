@@ -1,4 +1,17 @@
 import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+
+/**
+ * Cursor
+ */
+const cursor = {
+    x: 0,
+    y: 0
+}
+window.addEventListener('mousemove', (event) => {
+    cursor.x = event.clientX / sizes.width - 0.5
+    cursor.y = - ( event.clientY / sizes.height - 0.5 )
+})
 
 /**
  * Base
@@ -20,15 +33,28 @@ const mesh = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 1, 5, 5, 5),
     new THREE.MeshBasicMaterial({ color: 0xff0000 })
 )
+
+const mesh2 = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1, 5, 5, 5),
+    new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+)
+mesh2.position.x = 2
 scene.add(mesh)
+scene.add(mesh2)
+
 
 // Camera
-// const camera = new THREE.PerspectiveCamera(60, sizes.width / sizes.height)
-const aspectRatio = sizes.width / sizes.height
-const camera = new THREE.OrthographicCamera(-1 * aspectRatio, 1 * aspectRatio, 1, -1)
-camera.position.x = 2
-camera.position.y = 2
-camera.position.z = 2
+const camera = new THREE.PerspectiveCamera(60, sizes.width / sizes.height)
+
+// Controls
+const controls = new OrbitControls(camera, canvas)
+
+controls.enableDamping = true
+
+
+// camera.position.x = 2
+// camera.position.y = 2
+camera.position.z = 4
 camera.lookAt(mesh.position)
 scene.add(camera)
 
@@ -46,7 +72,17 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
 
     // Update objects
-    mesh.rotation.y = elapsedTime;
+    // mesh.rotation.y = elapsedTime;
+
+    // Update camera
+    // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 3
+    // camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 3
+    // camera.position.y = cursor.y * 5
+
+    // camera.lookAt(mesh.position)
+
+    controls.update()
+
 
     // Render
     renderer.render(scene, camera)
